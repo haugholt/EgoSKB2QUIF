@@ -26,7 +26,8 @@ namespace SKB2QIF.Core
             List<string> lines = new List<string>();
             if (!fifo.Exists) return lines;
 
-            using (StreamReader rea = new StreamReader(fileName, true))
+            //using (StreamReader rea = new StreamReader(fileName, true))
+            using (StreamReader rea = new StreamReader(fileName, Encoding.GetEncoding(28591)))
             {
                 while (!rea.EndOfStream)
                 {
