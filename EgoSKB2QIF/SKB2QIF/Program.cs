@@ -25,6 +25,11 @@ namespace SKB2QIF
                 //return;
             }
 
+            FileReader ruleFile = new FileReader("rules.txt");
+            var rules = ruleFile.ReadAllLines();
+
+            var ruleInvoker = new Core.Rules(rules);
+
             FileReader fr = new FileReader(args[0]);
             var lines = fr.ReadAllLines();
 
@@ -35,59 +40,22 @@ namespace SKB2QIF
             //Console.Out.WriteLine("\nSimpleSplit:\n");
             //lines.ForEach(l => Parse(l));
 
-            
-            ToQIF(lines, output);
+
+            ToQIF(lines, output, ruleInvoker);
         }
 
-        private static void ToQIF(List<string> lines, IOutput output)
+        private static void ToQIF(List<string> lines, IOutput output, Rules rules)
         {
             output.GenerateQifHeader();
             for (int i = 3; i < lines.Count-2; i++) //TODO: SKB specific!
             {
-                QifLine qifLine = LineToQif(lines[i]);
+                QifLine qifLine = LineToQifService.LineToQif(lines[i], rules);
                 if (qifLine.Category.Equals("Transfer")) continue; //TODO: Skipping Transfers for now!
                 output.GenerateEntry(qifLine);
             }
         }
 
-        private static QifLine LineToQif(string line)
-        {
-            var item = line.Split(new char[] { '\t' });
-            /*
-                0: "BOKF?RINGSDATO"
-                1: "RENTEDATO"
-                2: "ARKIVREFERANSE"
-                3: "TYPE"
-                4: "TEKST"
-                5: "UT FRA KONTO"
-                6: "INN P? KONTO"
-                7:
-             */
-            string date = item[0];
-            string amount = item[5] == "" ? item[6] : string.Format("-{0}", item[5]);
-            string payee = item[4].ToLower().Contains("meny") ? "Meny" : "Unknown";
-            string number = item[2];
-            string category = item[4].ToLower().Contains("meny") ? "Mat" : "Unknown";
-            
-            //if (item[3].ToLower().Contains("overf")) { 
-            //    category = "Transfer";
-            //    payee = "SKB Unspecified";
-            //    Console.Out.WriteLine("TRANSFER: {0}", line);
-            //}
-            string message = item[4];
-
-            date = date.Replace("\"", "");
-            amount = amount.Replace("\"", "");
-            payee = payee.Replace("\"", "");
-            number = number.Replace("\"", ""); number = number.Replace("*", "0");
-            category = category.Replace("\"", "");
-            message = message.Replace("\"", "");
-
-            QifLine qifLine = new QifLine(date, amount, payee, number, category, message);
-
-            return qifLine;
-        }
-
+        
         private static void Parse(string l)
         {
             var sl= l.Split(new char[]{'\t'});
