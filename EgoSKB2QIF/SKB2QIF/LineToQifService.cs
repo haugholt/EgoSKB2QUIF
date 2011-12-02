@@ -25,7 +25,8 @@ namespace SKB2QIF
             string amount = item[5] == "" ? item[6] : string.Format("-{0}", item[5]);
             string payee = rules.FindPayee(item[4]);
             string number = item[2];
-            string category = item[4].ToLower().Contains("meny") ? "Mat" : "Unknown";
+            string category = rules.FindCategory(item[4]);
+            //string category = item[4].ToLower().Contains("meny") ? "Mat" : "Unknown";
 
             //if (item[3].ToLower().Contains("overf")) { 
             //    category = "Transfer";

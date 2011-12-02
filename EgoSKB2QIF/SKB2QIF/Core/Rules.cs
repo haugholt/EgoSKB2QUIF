@@ -22,18 +22,26 @@ namespace SKB2QIF.Core
                 if (ruleItem.Match(p)) return ruleItem.Payee;
             }
             return "Unknown";
-            //return p.ToLower().Contains("meny") ? "Meny" : "Unknown";
+        }
+
+        internal string FindCategory(string p)
+        {
+            foreach (RuleItem ruleItem in this.Items)
+            {
+                if (ruleItem.Match(p)) return ruleItem.Category;
+            }
+            return "Unknown";
         }
 
         private class RuleItem {
-            private string category;
+            
             private string expression;
 
             public RuleItem(string payee, string category, string expression)
             {
                 // TODO: Complete member initialization
                 this.Payee = payee;
-                this.category = category;
+                this.Category = category;
                 this.expression = expression;
             }
 
@@ -44,6 +52,8 @@ namespace SKB2QIF.Core
                 return p.ToLower().Contains(expression.ToLower());
                 
             }
+
+            public string Category { get; private set; }
         }
 
         private IEnumerable<RuleItem> Items { 
@@ -55,5 +65,7 @@ namespace SKB2QIF.Core
                 }
             }  
         }
+
+        
     }
 }

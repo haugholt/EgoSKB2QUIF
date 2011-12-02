@@ -31,8 +31,10 @@ namespace SKB2QIF.Core
             {
                 while (!rea.EndOfStream)
                 {
+                    var line = rea.ReadLine();
+                    if(line.StartsWith("#")) continue;
                     lines.Add(
-                        rea.ReadLine());
+                        line);
                 }
             }
             return lines;
