@@ -28,7 +28,9 @@ namespace SKB2QIF
             FileReader ruleFile = new FileReader("rules.txt");
             var rules = ruleFile.ReadAllLines();
 
-            var ruleInvoker = new Core.Rules(rules);
+            DelayReporter delayReporter = new DelayReporter();
+
+            var ruleInvoker = new Core.Rules(rules, delayReporter);
 
             FileReader fr = new FileReader(args[0]);
             var lines = fr.ReadAllLines();
@@ -42,6 +44,9 @@ namespace SKB2QIF
 
 
             ToQIF(lines, output, ruleInvoker);
+
+            Console.Out.WriteLine("\nRules result:");
+            delayReporter.ReportAll();
         }
 
         private static void ToQIF(List<string> lines, IOutput output, Rules rules)

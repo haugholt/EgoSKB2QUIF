@@ -8,11 +8,13 @@ namespace SKB2QIF.Core
     class Rules
     {
         private List<string> rules;
+        private IReport reporter;
 
-        public Rules(List<string> rules)
+        public Rules(List<string> rules, IReport reporter)
         {
             // TODO: Complete member initialization
             this.rules = rules;
+            this.reporter = reporter;
         }
 
         internal string FindPayee(string p)
@@ -21,6 +23,7 @@ namespace SKB2QIF.Core
             {
                 if (ruleItem.Match(p)) return ruleItem.Payee;
             }
+            reporter.WriteLine(p);
             return "Unknown";
         }
 
@@ -65,6 +68,8 @@ namespace SKB2QIF.Core
                 }
             }  
         }
+
+
 
         
     }

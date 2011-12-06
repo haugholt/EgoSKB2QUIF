@@ -33,6 +33,7 @@ namespace SKB2QIF.Core
                 {
                     var line = rea.ReadLine();
                     if(line.StartsWith("#")) continue;
+                    if (line.Trim().Equals("")) continue;
                     lines.Add(
                         line);
                 }
