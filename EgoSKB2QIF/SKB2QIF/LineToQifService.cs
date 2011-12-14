@@ -23,16 +23,22 @@ namespace SKB2QIF
              */
             string date = item[0];
             string amount = item[5] == "" ? item[6] : string.Format("-{0}", item[5]);
-            string payee = rules.FindPayee(item[4]);
+            
             string number = item[2];
-            string category = rules.FindCategory(item[4]);
-            //string category = item[4].ToLower().Contains("meny") ? "Mat" : "Unknown";
 
-            //if (item[3].ToLower().Contains("overf")) { 
-            //    category = "Transfer";
-            //    payee = "SKB Unspecified";
-            //    Console.Out.WriteLine("TRANSFER: {0}", line);
-            //}
+            string payee = "";
+            string category = "" ;
+            if (item[3].ToLower().Contains("overføring"))
+            {
+                category = "Transfer";
+                payee = "SKB Unspecified";
+                //Console.Out.WriteLine("TRANSFER: {0}", line);
+                //throw new NotImplementedException(line);
+            }
+            else{
+                category = rules.FindCategory(item[4]);
+                payee = rules.FindPayee(item[4]);
+            }
             string message = item[4];
 
             date = date.Replace("\"", "");
